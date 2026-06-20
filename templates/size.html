@@ -1,0 +1,403 @@
+{% extends "_layout.html" %}
+{% block title %}Size Recommendation — EcoTry{% endblock %}
+
+{% block head %}
+<style>
+  .size-wrap {
+    max-width: 860px;
+    margin: 30px auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .size-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 20px;
+    padding: 28px;
+  }
+
+  .size-card h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .size-muted {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+
+  /* ── Upload boxes ── */
+  .upload-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .upload-group {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .upload-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .upload-box {
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .upload-box:hover {
+    border-color: rgba(123,220,59,0.45);
+    background: rgba(123,220,59,0.04);
+  }
+
+  .upload-box input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-icon { font-size: 28px; }
+  .upload-label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8); }
+  .upload-sub   { font-size: 11px; color: var(--muted); }
+
+  .preview-img {
+    display: none;
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 1px solid rgba(255,255,255,0.10);
+  }
+
+  /* ── Form fields ── */
+  .form-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .form-group input,
+  .form-group select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 14px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color .15s;
+    width: 100%;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: rgba(123,220,59,0.45);
+  }
+
+  .form-group select option { background: #111; }
+
+  /* ── Submit button ── */
+  .btn-size {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    background: rgba(123,220,59,0.9);
+    color: #000;
+    transition: opacity .15s;
+  }
+  .btn-size:hover { opacity: .85; }
+
+  /* ── Error ── */
+  .error-box {
+    background: rgba(255,80,80,0.10);
+    border: 1px solid rgba(255,80,80,0.30);
+    border-radius: 14px;
+    padding: 14px 18px;
+    color: #ff8080;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  /* ── Result ── */
+  .result-hero {
+    text-align: center;
+    padding: 24px 0 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 20px;
+  }
+
+  .result-label {
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .result-value {
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(123,220,59,0.95);
+    letter-spacing: -2px;
+  }
+
+  .result-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .info-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .info-chip {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .info-chip strong { color: rgba(255,255,255,0.9); }
+
+  .measurements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .measure-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .measure-val  { font-size: 22px; font-weight: 900; color: rgba(123,220,59,0.9); }
+  .measure-name { font-size: 11px; color: var(--muted); margin-top: 4px;
+                  text-transform: uppercase; letter-spacing: 0.4px; }
+
+  .btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 11px 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .15s;
+  }
+  .btn-back:hover { background: rgba(255,255,255,0.08); }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="size-wrap">
+
+  <!-- ── Input Card ── -->
+  <div class="size-card">
+    <h2>📏 AI Size Recommendation</h2>
+    <p class="size-muted">
+      Upload a front-facing full-body photo. Enter your height and weight.
+      Our AI detects your body measurements and recommends your perfect size.
+    </p>
+
+    {% if error %}
+    <div class="error-box">⚠️ {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('size_page') }}">
+
+      <!-- Photo upload -->
+      <div class="upload-row">
+        <div class="upload-group">
+          <label>📸 Front Photo</label>
+          <div class="upload-box" id="front-box">
+            <input type="file" name="front_image" accept="image/*" id="front-input" required>
+            <div class="upload-icon">🧍</div>
+            <div class="upload-label">Click to upload</div>
+            <div class="upload-sub">Full body • Front view • Good lighting</div>
+          </div>
+          <img class="preview-img" id="front-preview" alt="Front preview">
+        </div>
+
+        <div class="upload-group">
+          <label>📸 Side Photo (optional)</label>
+          <div class="upload-box" id="side-box">
+            <input type="file" name="side_image" accept="image/*" id="side-input">
+            <div class="upload-icon">🧍</div>
+            <div class="upload-label">Click to upload</div>
+            <div class="upload-sub">Full body • Side view • Optional</div>
+          </div>
+          <img class="preview-img" id="side-preview" alt="Side preview">
+        </div>
+      </div>
+
+      <!-- Height / Weight / Gender -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Height (ft)</label>
+          <input type="number" name="height_ft" min="3" max="7" placeholder="e.g. 5"
+                 value="{{ request.form.get('height_ft', '') }}" required>
+        </div>
+        <div class="form-group">
+          <label>Height (in)</label>
+          <input type="number" name="height_in" min="0" max="11" placeholder="e.g. 6"
+                 value="{{ request.form.get('height_in', '') }}" required>
+        </div>
+        <div class="form-group">
+          <label>Weight (kg)</label>
+          <input type="number" name="weight" min="20" max="250" placeholder="e.g. 60"
+                 value="{{ request.form.get('weight', '') }}" required>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select name="gender">
+            <option value="Female" {% if request.form.get('gender','Female')=='Female' %}selected{% endif %}>Female</option>
+            <option value="Male"   {% if request.form.get('gender')=='Male' %}selected{% endif %}>Male</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-size" type="submit">🔍 Get My Size</button>
+    </form>
+  </div>
+
+  <!-- ── Result Card ── -->
+  {% if result %}
+  <div class="size-card">
+
+    <div class="result-hero">
+      <div class="result-label">Your Recommended Size</div>
+      <div class="result-value">{{ result.size }}</div>
+      <p class="result-sub">Based on your body measurements, height and weight</p>
+    </div>
+
+    <div class="info-row">
+      <div class="info-chip">Height: <strong>{{ result.height_cm }} cm</strong></div>
+      <div class="info-chip">Weight: <strong>{{ result.weight }} kg</strong></div>
+      <div class="info-chip">Gender: <strong>{{ result.gender }}</strong></div>
+    </div>
+
+    <div class="measurements-grid">
+      <div class="measure-item">
+        <div class="measure-val">{{ result.shoulder }}</div>
+        <div class="measure-name">Shoulder cm</div>
+      </div>
+      <div class="measure-item">
+        <div class="measure-val">{{ result.chest }}</div>
+        <div class="measure-name">Chest cm</div>
+      </div>
+      <div class="measure-item">
+        <div class="measure-val">{{ result.waist }}</div>
+        <div class="measure-name">Waist cm</div>
+      </div>
+      <div class="measure-item">
+        <div class="measure-val">{{ result.hip }}</div>
+        <div class="measure-name">Hip cm</div>
+      </div>
+      <div class="measure-item">
+        <div class="measure-val">{{ result.chest_depth }}</div>
+        <div class="measure-name">Chest Depth cm</div>
+      </div>
+      <div class="measure-item">
+        <div class="measure-val">{{ result.hip_depth }}</div>
+        <div class="measure-name">Hip Depth cm</div>
+      </div>
+    </div>
+
+    <a href="{{ url_for('home') }}" class="btn-back">← Back to Shop</a>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+  // Image preview helper
+  function setupPreview(inputId, previewId, boxId) {
+    const input   = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const box     = document.getElementById(boxId);
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = "block";
+        box.querySelector(".upload-icon").textContent  = "✅";
+        box.querySelector(".upload-label").textContent = file.name;
+        box.querySelector(".upload-sub").textContent   = "Photo selected";
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  setupPreview("front-input", "front-preview", "front-box");
+  setupPreview("side-input",  "side-preview",  "side-box");
+</script>
+{% endblock %}

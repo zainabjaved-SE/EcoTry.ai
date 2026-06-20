@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Try-On – {{ product.product_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0a; color: #fff;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; padding: 24px 16px;
+    }
+    h2 { color: #7ed957; font-size: 22px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; opacity: 0.55; margin-bottom: 20px; }
+    .row {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      justify-content: center; width: 100%; max-width: 1000px;
+    }
+    .panel {
+      background: #141414; border: 1px solid #2a2a2a;
+      border-radius: 16px; padding: 18px;
+      flex: 1; min-width: 280px; max-width: 460px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+    }
+    .panel-title {
+      font-size: 13px; font-weight: 700; opacity: 0.7;
+      align-self: flex-start; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    video { width: 100%; border-radius: 10px; background: #000;
+            max-height: 340px; object-fit: cover; display: block; }
+    #result-img {
+      width: 100%; border-radius: 10px; object-fit: contain;
+      display: none; max-height: 400px;
+    }
+    #placeholder {
+      width: 100%; height: 280px;
+      border: 2px dashed #2a2a2a; border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px; color: #444; font-size: 13px;
+    }
+    #placeholder img {
+      width: 90px; height: 110px; object-fit: contain;
+      border-radius: 8px; opacity: 0.6;
+    }
+    .btn {
+      width: 100%; padding: 13px; border-radius: 10px;
+      border: none; font-size: 15px; font-weight: 800;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .btn:hover   { opacity: .85; }
+    .btn:disabled { opacity: .35; cursor: not-allowed; }
+    .btn-green { background: #7ed957; color: #000; }
+    .btn-dark  { background: #222; color: #fff;
+                 border: 1px solid #444; display: none; }
+    .btn-back  {
+      background: #1a1a1a; color: #aaa;
+      border: 1px solid #2a2a2a; margin-top: 18px;
+      width: auto; padding: 11px 28px; font-size: 14px;
+    }
+    #status { font-size: 13px; opacity: .65; text-align: center; min-height: 18px; }
+    .loading-bar-wrap {
+      display: none; width: 100%;
+      background: #222; border-radius: 999px; height: 6px; overflow: hidden;
+    }
+    .loading-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #7ed957, #3db800);
+      border-radius: 999px; transition: width 0.5s ease;
+    }
+    .loading-note {
+      display: none; font-size: 12px;
+      color: rgba(126,217,87,0.8); text-align: center; line-height: 1.5;
+    }
+    #error-box {
+      color: #ff6060; font-size: 13px; text-align: center;
+      display: none; background: rgba(255,80,80,0.08);
+      border: 1px solid rgba(255,80,80,0.25);
+      border-radius: 10px; padding: 10px; width: 100%;
+    }
+    canvas { display: none; }
+  </style>
+</head>
+<body>
+  <h2>📷 Live Try-On</h2>
+  <p class="subtitle">{{ product.product_name }} — capture your photo, AI will dress you!</p>
+
+  <div class="row">
+    <!-- LEFT: Camera -->
+    <div class="panel">
+      <div class="panel-title">📸 Your Camera</div>
+      <video id="video" autoplay playsinline muted></video>
+      <div id="status">Starting camera…</div>
+      <div class="loading-bar-wrap" id="loading-bar-wrap">
+        <div class="loading-bar" id="loading-bar"></div>
+      </div>
+      <div class="loading-note" id="loading-note">
+        🤖 IDM-VTON AI is processing… same as image upload!<br>
+        Please wait 20–40 seconds…
+      </div>
+      <div id="error-box"></div>
+      <button class="btn btn-green" id="btn-capture" disabled>
+        📸 Capture &amp; Try On (AI)
+      </button>
+      <button class="btn btn-dark" id="btn-retake">↩ Retake Photo</button>
+    </div>
+
+    <!-- RIGHT: Result -->
+    <div class="panel">
+      <div class="panel-title">👗 AI Result</div>
+      <div id="placeholder">
+        <img src="{{ product.image_src }}" alt="cloth">
+        <span>Capture photo to see AI result</span>
+        <span style="font-size:11px;color:#333;">Same IDM-VTON model ✨</span>
+      </div>
+      <img id="result-img" alt="Try-On Result">
+    </div>
+  </div>
+
+  <a href="{{ url_for('tryon_product', product_id=product.product_id) }}">
+    <button class="btn btn-back">← Back to Image Try-On</button>
+  </a>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const video       = document.getElementById("video");
+    const canvas      = document.getElementById("canvas");
+    const btnCapture  = document.getElementById("btn-capture");
+    const btnRetake   = document.getElementById("btn-retake");
+    const resultImg   = document.getElementById("result-img");
+    const placeholder = document.getElementById("placeholder");
+    const statusEl    = document.getElementById("status");
+    const loadingWrap = document.getElementById("loading-bar-wrap");
+    const loadingBar  = document.getElementById("loading-bar");
+    const loadingNote = document.getElementById("loading-note");
+    const errorBox    = document.getElementById("error-box");
+
+    const PRODUCT_ID = {{ product.product_id | tojson }};
+    let progressInterval = null;
+
+    // ── Start camera ──────────────────────────────────────────────────────
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 640, height: 480, facingMode: "user" },
+          audio: false
+        });
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          statusEl.textContent = "✅ Ready — stand back so full body is visible, then Capture.";
+          btnCapture.disabled = false;
+        };
+      } catch (err) {
+        showError("❌ Camera access denied. Please allow camera in browser.");
+      }
+    }
+
+    // ── Capture frame → Blob (NOT base64, smaller size) ───────────────────
+    function captureBlob() {
+      canvas.width  = video.videoWidth  || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext("2d");
+      // mirror
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, 0, 0);
+      return new Promise(resolve =>
+        canvas.toBlob(resolve, "image/jpeg", 0.85)
+      );
+    }
+
+    // ── Progress bar animation ────────────────────────────────────────────
+    function startProgress() {
+      loadingWrap.style.display = "block";
+      loadingNote.style.display = "block";
+      loadingBar.style.width = "0%";
+      let pct = 0;
+      progressInterval = setInterval(() => {
+        if (pct < 88) {
+          pct += pct < 50 ? 2 : 0.4;
+          loadingBar.style.width = pct + "%";
+        }
+      }, 600);
+    }
+
+    function finishProgress() {
+      clearInterval(progressInterval);
+      loadingBar.style.width = "100%";
+      setTimeout(() => {
+        loadingWrap.style.display = "none";
+        loadingNote.style.display = "none";
+      }, 400);
+    }
+
+    // ── Send photo as FormData (same as file upload, avoids SSL issues) ───
+    async function processPhoto() {
+      btnCapture.disabled = true;
+      btnCapture.textContent = "⏳ Processing…";
+      hideError();
+      startProgress();
+      statusEl.textContent = "🤖 AI model processing… please wait (20–40s)";
+
+      try {
+        // Capture as Blob — much smaller than base64, avoids SSL timeout
+        const blob = await captureBlob();
+
+        // Send as FormData — exactly like a file upload
+        const formData = new FormData();
+        formData.append("person_image", blob, "capture.jpg");
+
+        const res  = await fetch(
+          `/live-tryon/capture-form/${PRODUCT_ID}`,
+          { method: "POST", body: formData }
+        );
+        const data = await res.json();
+
+        finishProgress();
+
+        if (!data.ok) {
+          showError(data.error || "Try-on failed. Please try again.");
+          resetUI();
+          return;
+        }
+
+        // Show result
+        resultImg.src             = data.result;
+        resultImg.style.display   = "block";
+        placeholder.style.display = "none";
+        statusEl.textContent      = "✅ Done! Looking great 🎉";
+        btnCapture.style.display  = "none";
+        btnRetake.style.display   = "block";
+
+      } catch (e) {
+        finishProgress();
+        showError("Network error. Please try again.");
+        resetUI();
+      }
+    }
+
+    btnCapture.addEventListener("click", processPhoto);
+    btnRetake.addEventListener("click",  resetUI);
+
+    function resetUI() {
+      resultImg.style.display   = "none";
+      resultImg.src             = "";
+      placeholder.style.display = "flex";
+      btnCapture.style.display  = "block";
+      btnCapture.disabled       = false;
+      btnCapture.textContent    = "📸 Capture & Try On (AI)";
+      btnRetake.style.display   = "none";
+      statusEl.textContent      = "✅ Ready — stand back so full body is visible, then Capture.";
+    }
+
+    function showError(msg) {
+      errorBox.textContent   = msg;
+      errorBox.style.display = "block";
+    }
+    function hideError() { errorBox.style.display = "none"; }
+
+    startCamera();
+  </script>
+</body>
+</html>

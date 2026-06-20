@@ -1,0 +1,19 @@
+{% extends "_layout.html" %}
+{% block title %}EcoTry — Admin Login{% endblock %}
+
+{% block body %}
+<div class="panel" style="margin-top:16px; padding:14px;">
+  <h2 style="margin:0 0 6px;">Admin Login</h2>
+  <div style="color:var(--muted); font-size:12px; margin-bottom:12px;">
+    Default password: <strong style="color:rgba(255,255,255,0.92)">admin123</strong> (change via env ECOTRY_ADMIN_PASSWORD)
+  </div>
+
+  <form method="post" action="{{ url_for('admin_login') }}" style="display:grid; gap:10px; max-width:360px;">
+    <div style="display:grid; gap:6px;">
+      <label style="font-size:12px; color:var(--muted);">Password</label>
+      <input type="password" name="password" style="padding:12px; border-radius:14px; border:1px solid var(--line); background:rgba(255,255,255,0.04); color:var(--text);" />
+    </div>
+    <button class="btn" type="submit">Login</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,252 @@
+{# File: templates/_ai_sidebar.html #}
+<style>
+  .ai-nav-card {
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+    padding: 14px;
+    margin-top: 14px;
+  }
+  .ai-nav-title {
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .ai-nav-btn {
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.18);
+    color: inherit;
+    border-radius: 14px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .ai-nav-btn.active {
+    border-color: rgba(123,220,59,0.35);
+    background: rgba(123,220,59,0.08);
+  }
+  .ai-nav-panel {
+    margin-top: 10px;
+    display: none;
+    gap: 10px;
+    flex-direction: column;
+  }
+  .ai-nav-panel.active { display: flex; }
+
+  .ai-muted { opacity: .75; font-size: 12px; }
+  .ai-error { color: #ff6b6b; font-size: 12px; margin-top: 8px; }
+  .ai-swatch { width: 14px; height: 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.20); display:inline-block; }
+  .ai-chip {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.18);
+    color: inherit;
+    border-radius: 999px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .ai-chip.active {
+    border-color: rgba(123,220,59,0.35);
+    background: rgba(123,220,59,0.08);
+  }
+  .ai-mini-card {
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 16px;
+    padding: 10px;
+    background: rgba(0,0,0,0.12);
+  }
+</style>
+
+<div class="ai-nav-card">
+  <div class="ai-nav-title">AI Stylist</div>
+
+  <button id="ai-nav-palette-btn" class="ai-nav-btn active" type="button">
+    <span>🎨 Color Palette</span><span>›</span>
+  </button>
+
+  <button id="ai-nav-style-btn" class="ai-nav-btn" type="button">
+    <span>🧥 Style Recs</span><span>›</span>
+  </button>
+
+  <div id="ai-nav-error" class="ai-error"></div>
+
+  <div id="ai-nav-palette-panel" class="ai-nav-panel active">
+    <div class="ai-mini-card">
+      <div style="font-weight:900; font-size:13px;">Skin tone</div>
+      <div class="ai-muted">On Try-On page, it uses the same uploaded photo automatically.</div>
+      <input id="ai-selfie" type="file" accept="image/*" style="margin-top:10px;" />
+      <div id="ai-skin" class="ai-muted" style="margin-top:10px;"></div>
+    </div>
+
+    <div id="ai-palettes" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+
+  <div id="ai-nav-style-panel" class="ai-nav-panel">
+    <div class="ai-mini-card">
+      <div style="font-weight:900; font-size:13px;">Vibe</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+        <button class="ai-chip active" data-vibe="minimal" type="button">Minimal</button>
+        <button class="ai-chip" data-vibe="streetwear" type="button">Streetwear</button>
+        <button class="ai-chip" data-vibe="formal" type="button">Formal</button>
+        <button class="ai-chip" data-vibe="smart-casual" type="button">Smart</button>
+      </div>
+      <button id="ai-style-run" class="ai-nav-btn" type="button" style="margin-top:10px;">
+        <span>Refresh</span><span>↻</span>
+      </button>
+      <div class="ai-muted">Upload a photo above for better results.</div>
+    </div>
+
+    <div id="ai-style" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const btnPalette = document.getElementById("ai-nav-palette-btn");
+  const btnStyle = document.getElementById("ai-nav-style-btn");
+  const panelPalette = document.getElementById("ai-nav-palette-panel");
+  const panelStyle = document.getElementById("ai-nav-style-panel");
+
+  const selfieInput = document.getElementById("ai-selfie");
+  const errBox = document.getElementById("ai-nav-error");
+  const skinBox = document.getElementById("ai-skin");
+  const palettesBox = document.getElementById("ai-palettes");
+
+  const styleBox = document.getElementById("ai-style");
+  const runStyleBtn = document.getElementById("ai-style-run");
+
+  let vibe = "minimal";
+
+  function setTab(which) {
+    if (which === "palette") {
+      btnPalette.classList.add("active");
+      btnStyle.classList.remove("active");
+      panelPalette.classList.add("active");
+      panelStyle.classList.remove("active");
+    } else {
+      btnStyle.classList.add("active");
+      btnPalette.classList.remove("active");
+      panelStyle.classList.add("active");
+      panelPalette.classList.remove("active");
+    }
+  }
+
+  btnPalette.addEventListener("click", () => setTab("palette"));
+  btnStyle.addEventListener("click", () => setTab("style"));
+
+  document.querySelectorAll(".ai-chip").forEach((el) => {
+    el.addEventListener("click", () => {
+      document.querySelectorAll(".ai-chip").forEach((c) => c.classList.remove("active"));
+      el.classList.add("active");
+      vibe = el.getAttribute("data-vibe") || "minimal";
+    });
+  });
+
+  function getTryonFileIfExists() {
+    const tryonInput = document.getElementById("person_image");
+    if (tryonInput && tryonInput.files && tryonInput.files[0]) return tryonInput.files[0];
+    return null;
+  }
+
+  function getSelfieFile() {
+    const f1 = getTryonFileIfExists();
+    if (f1) return f1;
+    if (selfieInput && selfieInput.files && selfieInput.files[0]) return selfieInput.files[0];
+    return null;
+  }
+
+  async function fetchPalette() {
+    errBox.textContent = "";
+    skinBox.textContent = "";
+    palettesBox.innerHTML = "";
+
+    const f = getSelfieFile();
+    if (!f) return;
+
+    const fd = new FormData();
+    fd.append("selfie", f);
+
+    const res = await fetch("/api/ai/palette", { method: "POST", body: fd });
+    const data = await res.json();
+    if (!data.ok) { errBox.textContent = data.error || "Failed."; return; }
+
+    const rgb = data.skin.rgb;
+    skinBox.innerHTML =
+      `Detected skin: <span class="ai-swatch" style="background: rgb(${rgb[0]},${rgb[1]},${rgb[2]});"></span>
+       <span class="ai-muted"> rgb(${rgb.join(",")})</span>`;
+
+    (data.palettes || []).forEach((p) => {
+      const card = document.createElement("div");
+      card.className = "ai-mini-card";
+      card.innerHTML = `
+        <div style="font-weight:900; font-size:13px;">${p.name}</div>
+        <div class="ai-muted">${p.note}</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;">
+          ${(p.swatches || []).map(hex => `<span class="ai-swatch" title="${hex}" style="background:${hex};"></span>`).join("")}
+        </div>
+      `;
+      palettesBox.appendChild(card);
+    });
+  }
+
+  async function fetchStyle() {
+    errBox.textContent = "";
+    styleBox.innerHTML = "";
+
+    const fd = new FormData();
+    fd.append("vibe", vibe);
+    const f = getSelfieFile();
+    if (f) fd.append("selfie", f);
+
+    const res = await fetch("/api/ai/style", { method: "POST", body: fd });
+    const data = await res.json();
+    if (!data.ok) { errBox.textContent = data.error || "Failed."; return; }
+
+    (data.recs || []).forEach((r) => {
+      const p = r.product;
+      const div = document.createElement("div");
+      div.className = "ai-mini-card";
+      div.innerHTML = `
+        <div style="display:flex; gap:10px; align-items:center;">
+          <img src="${p.image_src}" style="width:52px; height:52px; border-radius:14px; object-fit:cover; border:1px solid rgba(255,255,255,.12);" />
+          <div style="min-width:0; flex:1;">
+            <div style="font-weight:900; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.product_name}</div>
+            <div class="ai-muted">Score: ${Number(r.score || 0).toFixed(3)} · ${p.category}</div>
+            <a href="/tryon/${p.product_id}" class="ai-muted" style="display:inline-block; margin-top:4px;">Try →</a>
+          </div>
+        </div>
+      `;
+      styleBox.appendChild(div);
+    });
+  }
+
+  if (selfieInput) {
+    selfieInput.addEventListener("change", async () => {
+      await fetchPalette();
+      await fetchStyle();
+    });
+  }
+
+  const tryonInput = document.getElementById("person_image");
+  if (tryonInput) {
+    tryonInput.addEventListener("change", async () => {
+      await fetchPalette();
+      await fetchStyle();
+    });
+  }
+
+  runStyleBtn.addEventListener("click", fetchStyle);
+
+  setTimeout(() => { fetchPalette(); fetchStyle(); }, 300);
+})();
+</script>

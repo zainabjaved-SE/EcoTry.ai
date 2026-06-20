@@ -1,0 +1,63 @@
+{% extends "_layout.html" %}
+{% block title %}EcoTry — Cart{% endblock %}
+
+{% block head %}
+<style>
+  .panel{ margin-top: 16px; padding: 14px; }
+  .row{ display:grid; grid-template-columns: 80px 1fr 110px 90px; gap: 12px; align-items:center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .row img{ width: 74px; height: 74px; object-fit: contain; background: rgba(0,0,0,0.2); border-radius: 14px; border: 1px solid var(--line); padding: 6px; }
+  .muted{ color: var(--muted); font-size: 12px; }
+  .qty input{
+    width: 80px; padding: 10px; border-radius: 14px; border: 1px solid var(--line);
+    background: rgba(255,255,255,0.04); color: var(--text); outline: none;
+  }
+  .top{ display:flex; justify-content:space-between; align-items:center; gap: 12px; flex-wrap: wrap; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="panel">
+  <div class="top">
+    <div>
+      <h2 style="margin:0;">Your Cart</h2>
+      <div class="muted">Update quantities then proceed to checkout.</div>
+    </div>
+    <div style="display:flex; gap: 10px;">
+      <a class="btn-ghost" href="/">Continue Shopping</a>
+      <a class="btn" href="{{ url_for('checkout') }}">Checkout</a>
+    </div>
+  </div>
+
+  {% if not lines %}
+    <div style="margin-top: 14px; color: var(--muted);">Cart is empty.</div>
+  {% else %}
+    <form method="post" action="{{ url_for('cart_update') }}">
+      {% for l in lines %}
+        <div class="row">
+          <img src="{{ l['image_src'] }}" alt="{{ l['product_name'] }}">
+          <div>
+            <div style="font-weight: 700;">{{ l['product_name'] }}</div>
+            <div class="muted">
+              {{ l['category'] }} • Fabric: {{ l['fabric_type'] }} • Eco: {{ '%.1f'|format(l['eco']) }}/10
+            </div>
+          </div>
+          <div class="qty">
+            <input type="number" min="0" max="99" name="qty_{{ l['product_id'] }}" value="{{ l['qty'] }}">
+            <div class="muted">0 = remove</div>
+          </div>
+          <div style="display:flex; justify-content:flex-end;">
+            <button class="btn-ghost" type="submit" formaction="{{ url_for('cart_remove', product_id=l['product_id']) }}" formmethod="post">
+              Remove
+            </button>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div style="display:flex; justify-content:flex-end; gap: 10px; padding-top: 14px;">
+        <button class="btn-ghost" type="submit">Update Cart</button>
+        <a class="btn" href="{{ url_for('checkout') }}">Checkout</a>
+      </div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!-- templates/success.html -->
+{% extends "_layout.html" %}
+{% block title %}EcoTry — Order Success{% endblock %}
+
+{% block head %}
+<style>
+  .panel{ margin-top: 16px; padding: 18px; }
+  .box{ border: 1px solid rgba(123,220,59,0.30); background: rgba(123,220,59,0.08); border-radius: 18px; padding: 14px; }
+  .muted{ color: var(--muted); font-size: 12px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="panel">
+  <div class="box">
+    <h2 style="margin:0 0 6px;">Order placed ✅</h2>
+    <div class="muted">Demo order confirmation (stored in session).</div>
+  </div>
+
+  <div style="margin-top: 14px; display:grid; gap: 10px;">
+    <div class="muted">Name: <strong style="color: rgba(255,255,255,0.92);">{{ order['name'] }}</strong></div>
+    <div class="muted">Email: <strong style="color: rgba(255,255,255,0.92);">{{ order['email'] }}</strong></div>
+    <div class="muted">Address: <strong style="color: rgba(255,255,255,0.92);">{{ order['address'] }}</strong></div>
+
+    <div class="muted">Eco Average: <strong style="color: rgba(255,255,255,0.92);">{{ order['eco_avg'] }}/10</strong></div>
+
+    <div style="margin-top: 8px; border-top: 1px solid var(--line); padding-top: 10px;">
+      <div class="muted" style="margin-bottom: 8px;">Items</div>
+      {% for it in order['items'] %}
+        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid var(--line);">
+          <div><strong>{{ it['product_name'] }}</strong> <span class="muted">x{{ it['qty'] }}</span></div>
+          <div class="muted">Eco {{ '%.1f'|format(it['eco']) }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div style="display:flex; gap: 10px; margin-top: 12px;">
+      <a class="btn" href="/">Back to shop</a>
+      <a class="btn-ghost" href="{{ url_for('cart_page') }}">Cart</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

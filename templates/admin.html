@@ -1,0 +1,92 @@
+{% extends "_layout.html" %}
+{% block title %}EcoTry — Admin{% endblock %}
+
+{% block head %}
+<style>
+  .panel{ margin-top: 16px; padding: 14px; }
+  .row{
+    display:grid;
+    grid-template-columns: 90px 1fr 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row img{
+    width: 84px; height: 84px; object-fit: contain;
+    background: rgba(0,0,0,0.2);
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 6px;
+  }
+  .muted{ color: var(--muted); font-size: 12px; }
+  input{
+    width: 100%; padding: 10px;
+    border-radius: 14px; border: 1px solid var(--line);
+    background: rgba(255,255,255,0.04);
+    color: var(--text); outline: none;
+  }
+  .actions{ display:flex; gap:10px; flex-wrap: wrap; margin-top: 10px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="panel">
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+    <div>
+      <h2 style="margin:0 0 6px;">Admin — Fix Wrong Fabrics</h2>
+      <div class="muted">Edits are stored in <strong style="color:rgba(255,255,255,0.92)">overrides.json</strong> (CSV stays unchanged).</div>
+    </div>
+    <form method="post" action="{{ url_for('admin_logout') }}">
+      <button class="btn-ghost" type="submit">Logout</button>
+    </form>
+  </div>
+
+  <div class="muted" style="margin-top:10px;">
+    Tip: If an image looks like satin but fabric says wool, change <strong>fabric_type</strong> here.
+  </div>
+
+  {% for it in items %}
+    <div class="row">
+      <div>
+        <img src="{{ it['image_src'] }}" alt="">
+        <div class="muted" style="margin-top:6px;">#{{ it['product_id'] }}</div>
+      </div>
+
+      <div>
+        <div style="font-weight:800;">Current (shown to users)</div>
+        <div class="muted">Name: {{ it['name'] }}</div>
+        <div class="muted">Fabric: {{ it['fabric'] }}</div>
+        <div class="muted">Category: {{ it['category'] }}</div>
+
+        <div style="margin-top:10px; font-weight:800;">Original (from CSV)</div>
+        <div class="muted">Name: {{ it['base_name'] }}</div>
+        <div class="muted">Fabric: {{ it['base_fabric'] }}</div>
+        <div class="muted">Category: {{ it['base_category'] }}</div>
+      </div>
+
+      <div>
+        <form method="post" action="{{ url_for('admin_save') }}">
+          <input type="hidden" name="product_id" value="{{ it['product_id'] }}"/>
+
+          <div class="muted" style="margin-bottom:6px;">Edit fields (leave blank to keep current)</div>
+
+          <div style="display:grid; gap:8px;">
+            <input name="product_name" placeholder="Correct product name" />
+            <input name="fabric_type" placeholder="Correct fabric (e.g., Satin / Silk / Cotton)" />
+            <input name="category" placeholder="Correct category (Dress / Jacket / Shirt...)" />
+          </div>
+
+          <div class="actions">
+            <button class="btn" type="submit">Save</button>
+          </form>
+
+          <form method="post" action="{{ url_for('admin_clear', product_id=it['product_id']) }}">
+            <button class="btn-ghost" type="submit">Clear Override</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
