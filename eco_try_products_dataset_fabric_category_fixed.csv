@@ -1,0 +1,51 @@
+product_id,product_name,fabric_type,image_url,water_usage_liters,co2_emission_kg,biodegradability_score,sustainability_score,awareness_text,category
+1,Cotton T-shirt,Cotton jersey,static/images/1.jpeg,1272.8,1.05,9,9.3,"Hemp has water usage ~1272.8L/kg, CO2 emission ~1.05kg/kg, biodegradability 9/10.",Shirt
+2,Bomber Jacket,Wool knit / wool blend,static/images/2.jpeg,1938.5,2.6,3,6.3,"Recycled Polyester has water usage ~1938.5L/kg, CO2 emission ~2.6kg/kg, biodegradability 3/10.",Jacket
+3,Women's Cotton Dress,Satin (polyester or silk satin),static/images/3.jpeg,1924.1,2.58,4,6.6,"Recycled Polyester has water usage ~1924.1L/kg, CO2 emission ~2.58kg/kg, biodegradability 4/10.",Dress
+4,Silk Shirt,Cotton jersey,static/images/4.jpeg,2800,3.25,7,6.7,"Silk has water usage ~2800.0L/kg, CO2 emission ~3.25kg/kg, biodegradability 7/10.",Shirt
+5,Gray Cotton Hoodie,"Denim (cotton denim, maybe elastane)",static/images/5.jpeg,2267.2,3.98,8,7.3,"Silk has water usage ~2267.2L/kg, CO2 emission ~3.98kg/kg, biodegradability 8/10.",Hoodie
+6,Cream-colored Hoodie,Denim / cotton twill,static/images/6.jpeg,4689.9,10.61,7,3,"Wool has water usage ~4689.9L/kg, CO2 emission ~10.61kg/kg, biodegradability 7/10.",Hoodie
+7,Polyester T-shirt,Fleece (cotton/poly blend),static/images/7.jpeg,2910,3.26,8,7,"Silk has water usage ~2910.0L/kg, CO2 emission ~3.26kg/kg, biodegradability 8/10.",Shirt
+8,Wool Sweater,Fleece (cotton/poly blend),static/images/8.jpeg,2595.5,5.32,1,4.3,"Polyester has water usage ~2595.5L/kg, CO2 emission ~5.32kg/kg, biodegradability 1/10.",Sweater
+9,Linen Shirt,Wool / wool blend (coat wool),static/images/9.jpeg,2326.6,3.84,6,6.6,"Silk has water usage ~2326.6L/kg, CO2 emission ~3.84kg/kg, biodegradability 6/10.",Shirt
+10,Silk Dress,Satin (polyester or silk satin),static/images/10.jpeg,1741.6,1.18,9,8.9,"Linen has water usage ~1741.6L/kg, CO2 emission ~1.18kg/kg, biodegradability 9/10.",Dress
+11,Gray Polyester T-shirt,Linen / linen-blend,static/images/11.jpeg,1477.1,1.31,9,9,"Linen has water usage ~1477.1L/kg, CO2 emission ~1.31kg/kg, biodegradability 9/10.",Shirt
+12,Cotton Hoodie,Polyester (performance knit),static/images/12.jpeg,2068.6,3.58,6,6.9,"Silk has water usage ~2068.6L/kg, CO2 emission ~3.58kg/kg, biodegradability 6/10.",Hoodie
+13,Silk Shirt,Cotton poplin / cotton-linen blend,static/images/13.jpeg,2231.3,3.66,6,6.7,"Silk has water usage ~2231.3L/kg, CO2 emission ~3.66kg/kg, biodegradability 6/10.",Shirt
+14,Red Bomber Jacket,Cotton jersey (or blend),static/images/14.jpeg,4112.6,10.72,7,3.4,"Wool has water usage ~4112.6L/kg, CO2 emission ~10.72kg/kg, biodegradability 7/10.",Jacket
+15,Wool Pink Sweater,Nylon/Polyester (synthetic shell),static/images/15.jpeg,2536.6,5.31,3,5,"Polyester has water usage ~2536.6L/kg, CO2 emission ~5.31kg/kg, biodegradability 3/10.",Sweater
+16,Linen Women's Dress,Wool knit / wool blend,static/images/16.jpeg,2742.2,5.97,1,4,"Polyester has water usage ~2742.2L/kg, CO2 emission ~5.97kg/kg, biodegradability 1/10.",Dress
+17,Silk Shirt,Satin (polyester or silk satin),static/images/17.jpeg,953.7,1.1,9,9.5,"Hemp has water usage ~953.7L/kg, CO2 emission ~1.1kg/kg, biodegradability 9/10.",Shirt
+18,Green Polyserter Jacket,Linen / linen-blend,static/images/18.jpeg,2080.6,2.74,3,6.1,"Recycled Polyester has water usage ~2080.6L/kg, CO2 emission ~2.74kg/kg, biodegradability 3/10.",Dress
+19,Cotton T-shirt,Polyester-heavy fleece / poly blend,static/images/19.jpeg,1385.8,1.59,9,9,"Linen has water usage ~1385.8L/kg, CO2 emission ~1.59kg/kg, biodegradability 9/10.",Jeans
+20,Cotton Tiered Skirt,Cotton jersey,static/images/20.jpeg,1897.9,2.27,5,7.1,"Recycled Polyester has water usage ~1897.9L/kg, CO2 emission ~2.27kg/kg, biodegradability 5/10.",Shirt
+21,Polyester Hoodie,Cotton jersey,static/images/21.jpeg,1819.8,2.99,5,6.9,"Recycled Polyester has water usage ~1819.8L/kg, CO2 emission ~2.99kg/kg, biodegradability 5/10.",Hoodie
+22,Wool Sweater,Wool / wool blend (coat wool),static/images/22.jpeg,2151.6,3.36,6,6.9,"Silk has water usage ~2151.6L/kg, CO2 emission ~3.36kg/kg, biodegradability 6/10.",Shirt
+23,Cotton Shirt,"Denim (cotton denim, maybe elastane)",static/images/23.jpeg,2782.8,3.96,7,6.5,"Silk has water usage ~2782.8L/kg, CO2 emission ~3.96kg/kg, biodegradability 7/10.",Jacket
+24,Purple Silk Women's Dress,Denim / cotton twill,static/images/24.jpeg,4598.6,10.02,9,3.9,"Wool has water usage ~4598.6L/kg, CO2 emission ~10.02kg/kg, biodegradability 9/10.",Jacket
+25,Cotton T-shirt,Denim / cotton twill,static/images/25.jpeg,4008,11.95,7,3.1,"Wool has water usage ~4008.0L/kg, CO2 emission ~11.95kg/kg, biodegradability 7/10.",Dress
+26,Cotton Denim Jacket,Cotton jersey,static/images/26.jpeg,1073,1.12,9,9.4,"Hemp has water usage ~1073.0L/kg, CO2 emission ~1.12kg/kg, biodegradability 9/10.",Hoodie
+27,Light Beige Jacket,Satin (polyester or silk satin),static/images/27.jpeg,2941.1,5.81,2,4.2,"Polyester has water usage ~2941.1L/kg, CO2 emission ~5.81kg/kg, biodegradability 2/10.",Jacket
+28,Wool Overcoat,Linen / linen-blend (or cotton-linen),static/images/28.jpeg,2838,5.1,3,4.8,"Polyester has water usage ~2838.0L/kg, CO2 emission ~5.1kg/kg, biodegradability 3/10.",Sweater
+29,Wool Overcoat,Wool knit / wool blend,static/images/29.jpeg,2085.9,2.5,4,6.5,"Recycled Polyester has water usage ~2085.9L/kg, CO2 emission ~2.5kg/kg, biodegradability 4/10.",Shirt
+30,Hemp T-shirt,Fleece (cotton/poly blend),static/images/30.jpeg,2922.3,5.23,1,4,"Polyester has water usage ~2922.3L/kg, CO2 emission ~5.23kg/kg, biodegradability 1/10.",Sweater
+31,Hemp T-shirt,Cotton jersey,static/images/31.jpeg,1185.4,1.33,9,9.3,"Hemp has water usage ~1185.4L/kg, CO2 emission ~1.33kg/kg, biodegradability 9/10.",Shirt
+32,Blue Polyester Jacket,Wool / wool blend (coat wool),static/images/32.jpeg,2347.6,3.65,6,6.6,"Silk has water usage ~2347.6L/kg, CO2 emission ~3.65kg/kg, biodegradability 6/10.",Jacket
+33,Cotton Women's Dress,"Denim (cotton denim, maybe elastane)",static/images/33.jpeg,2682.4,3.99,7,6.6,"Silk has water usage ~2682.4L/kg, CO2 emission ~3.99kg/kg, biodegradability 7/10.",Dress
+34,Silk Shirt,Denim / cotton twill,static/images/34.jpeg,1184.9,1.39,10,9.6,"Hemp has water usage ~1184.9L/kg, CO2 emission ~1.39kg/kg, biodegradability 10/10.",Shirt
+35,Wool Sweater,Denim / cotton twill,static/images/35.jpeg,1157,1,8,9,"Linen has water usage ~1157.0L/kg, CO2 emission ~1.0kg/kg, biodegradability 8/10.",Sweater
+36,Puffer Polyster jacket,Cotton jersey,static/images/36.jpeg,2856.4,3.75,6,6.2,"Silk has water usage ~2856.4L/kg, CO2 emission ~3.75kg/kg, biodegradability 6/10.",Jacket
+37,Hemp T-shirt,Satin (polyester or silk satin),static/images/37.jpeg,1053.7,1.43,10,9.7,"Hemp has water usage ~1053.7L/kg, CO2 emission ~1.43kg/kg, biodegradability 10/10.",Shirt
+38,Cotton Women's Dress,Linen / linen-blend (or cotton-linen),static/images/38.jpeg,4600.9,11.45,8,3.2,"Wool has water usage ~4600.9L/kg, CO2 emission ~11.45kg/kg, biodegradability 8/10.",Dress
+39,Hemp T-shirt ,Wool knit / wool blend,static/images/39.jpeg,2904.3,5.04,1,4.1,"Polyester has water usage ~2904.3L/kg, CO2 emission ~5.04kg/kg, biodegradability 1/10.",Shirt
+40,Cotton T-shirt,Fleece (cotton/poly blend),static/images/40.jpeg,1174.9,1.36,10,9.6,"Hemp has water usage ~1174.9L/kg, CO2 emission ~1.36kg/kg, biodegradability 10/10.",Shirt
+41,Silk Dress,Satin (polyester or silk satin),static/images/41.jpeg,2800.6,5.49,2,4.4,"Polyester has water usage ~2800.6L/kg, CO2 emission ~5.49kg/kg, biodegradability 2/10.",Dress
+42,Wool Overcoat,Linen / linen-blend,static/images/42.jpeg,2638.2,5.84,2,4.4,"Polyester has water usage ~2638.2L/kg, CO2 emission ~5.84kg/kg, biodegradability 2/10.",Coat
+43,Polyester Blue Hoodie,Wool knit / wool blend,static/images/43.jpeg,1004.2,1.5,9,9.4,"Hemp has water usage ~1004.2L/kg, CO2 emission ~1.5kg/kg, biodegradability 9/10.",Hodie
+44,Polyester Brown Hoodie,Polyester (performance knit),static/images/44.jpeg,2598.4,5.92,3,4.7,"Polyester has water usage ~2598.4L/kg, CO2 emission ~5.92kg/kg, biodegradability 3/10.",Hoodie
+45,Cotton Shirt,Fleece (cotton/poly blend),static/images/45.jpeg,1470.5,1.41,8,8.7,"Linen has water usage ~1470.5L/kg, CO2 emission ~1.41kg/kg, biodegradability 8/10.",Shirt
+46,Linen Shirt,Fleece (cotton/poly blend),static/images/46.jpeg,2689.3,5.58,1,4.1,"Polyester has water usage ~2689.3L/kg, CO2 emission ~5.58kg/kg, biodegradability 1/10.",Shirt
+47,Cotton T-shirt,Linen / linen-blend,static/images/47.jpeg,1315.2,1.36,9,9.1,"Hemp has water usage ~1315.2L/kg, CO2 emission ~1.36kg/kg, biodegradability 9/10.",Shirt
+48,Silk Shirt,Satin (polyester or silk satin),static/images/48.jpeg,2009.6,2.1,5,7,"Recycled Polyester has water usage ~2009.6L/kg, CO2 emission ~2.1kg/kg, biodegradability 5/10.",Shirt
+49,Wool Sweater,Polyester/Nylon (synthetic shell),static/images/49.jpeg,1234.5,1.96,7,8.4,"Linen has water usage ~1234.5L/kg, CO2 emission ~1.96kg/kg, biodegradability 7/10.",Sweater
+50,Cotton T-shirt,Cotton jersey,static/images/50.jpeg,2138.9,2.27,5,6.9,"Recycled Polyester has water usage ~2138.9L/kg, CO2 emission ~2.27kg/kg, biodegradability 5/10.",Shirt

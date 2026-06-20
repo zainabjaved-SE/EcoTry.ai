@@ -1,0 +1,10 @@
+flask
+pandas
+Pillow
+gradio_client
+opencv-python
+mediapipe
+numpy
+mediapipe==0.10.9
+scikit-learn
+joblib
