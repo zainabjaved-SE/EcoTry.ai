@@ -1,0 +1,367 @@
+<!-- templates/index.html -->
+ <div class="brand-header">
+  <img src="{{ url_for('static', filename='assets/ecotry-logo.jpeg') }}" 
+       alt="EcoTry Logo" 
+       class="brand-logo">
+
+  <div class="brand-text">
+    <h1>EcoTry</h1>
+    <p>Think. Try. Sustain.</p>
+  </div>
+</div>
+{% extends "_layout.html" %}
+<!-- Compact Brand Header -->
+
+{% block title %}EcoTry — Shop{% endblock %}
+
+{% block head %}
+<style>
+  /* Compact Header */
+.brand-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  padding: 14px 18px;
+  margin-bottom: 10px;
+
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.brand-logo{
+  width:72px;
+  height:72px;
+  object-fit:cover;
+
+  border-radius:18px;
+  background:white;
+  padding:6px;
+}
+
+.brand-text h1{
+  margin:0;
+  font-size:42px;
+  line-height:1;
+  color:white;
+}
+
+.brand-text p{
+  margin-top:6px;
+  font-size:15px;
+  color:rgba(255,255,255,0.75);
+}
+  .layout{ display:grid; grid-template-columns: 280px 1fr; gap: 16px; margin-top: 16px; }
+  .side{ padding: 14px; height: fit-content; position: sticky; top: 94px; }
+  .content{ padding: 0; }
+
+  .nav-section-title{
+    margin: 6px 0 10px;
+    font-size: 13px;
+    letter-spacing: .3px;
+    color: var(--muted);
+    font-weight: 650;
+    text-transform: uppercase;
+  }
+
+  .nav-btn{
+    width: 100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    padding: 12px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.18);
+    cursor:pointer;
+    transition: .15s ease;
+    font-weight: 850;
+    color: rgba(255,255,255,0.92);
+    margin-top: 10px;
+  }
+  .nav-btn:hover{ background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.16); }
+  .nav-btn.active{
+    border-color: rgba(123,220,59,0.38);
+    background: rgba(123,220,59,0.10);
+  }
+  .nav-btn .left{ display:flex; align-items:center; gap:10px; }
+  .nav-btn .icon{
+    width: 28px; height: 28px; border-radius: 12px;
+    display:grid; place-items:center;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .nav-link{
+    width: 100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    padding: 12px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.18);
+    cursor:pointer;
+    transition: .15s ease;
+    font-weight: 850;
+    color: rgba(255,255,255,0.92);
+    margin-top: 10px;
+  }
+  .nav-link:hover{ background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.16); }
+  .nav-link .left{ display:flex; align-items:center; gap:10px; }
+  .nav-link .icon{
+    width: 28px; height: 28px; border-radius: 12px;
+    display:grid; place-items:center;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .nav-panel{
+    display:none;
+    margin-top: 10px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(0,0,0,0.18);
+    padding: 12px;
+  }
+  .nav-panel.active{ display:block; }
+
+  .cat{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 10px 10px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    transition:.15s ease;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.03);
+  }
+  .cat:hover{ background: rgba(255,255,255,0.07); }
+  .cat.active{
+    border-color: rgba(123,220,59,0.45);
+    background: rgba(123,220,59,0.08);
+  }
+  .badge{
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    background: rgba(0,0,0,0.10);
+  }
+
+  .toolbar{
+    display:flex; align-items:center; gap:10px; padding: 14px;
+    border-bottom: 1px solid var(--line); flex-wrap: wrap;
+  }
+  .toolbar .title{ flex: 1; min-width: 220px; }
+  .toolbar h3{ margin:0; font-size: 16px; letter-spacing:.2px; }
+  .toolbar p{ margin:4px 0 0; font-size: 12px; color: var(--muted); }
+
+  .field{
+    display:flex; align-items:center; gap:8px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.04);
+    padding: 10px 10px;
+    border-radius: 14px;
+  }
+  .field input, .field select{
+    outline:none; border:none; background:transparent; color: var(--text);
+    font-size: 13px; min-width: 180px;
+  }
+  .field select{ min-width: 160px; cursor:pointer; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; padding: 14px; }
+  .card{
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.04);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .card:hover{ transform: translateY(-4px); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); }
+  .imgbox{
+    height: 220px; display:grid; place-items:center;
+    background: rgba(0,0,0,0.18);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .imgbox img{ width:100%; height:100%; object-fit:contain; padding: 10px; filter: drop-shadow(0 20px 25px rgba(0,0,0,.35)); }
+  .pill{
+    position:absolute; top: 10px; left: 10px;
+    font-size: 11px; padding: 6px 10px; border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(0,0,0,0.25);
+    color: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+  }
+  .body{ padding: 12px; }
+  .name{ margin: 0 0 6px; font-size: 14px; letter-spacing:.2px; line-height: 1.25; min-height: 36px; }
+  .meta{ display:flex; justify-content:space-between; gap: 8px; margin-bottom: 10px; color: var(--muted); font-size: 12px; }
+
+  .bar{ height:10px; border-radius:999px; border:1px solid var(--line); background: rgba(255,255,255,0.05); overflow:hidden; }
+  .fill{ height:100%; background: linear-gradient(90deg, rgba(255,93,93,0.95), rgba(255,201,76,0.95), rgba(123,220,59,0.95)); }
+
+  .desc{ margin: 0; color: rgba(255,255,255,0.72); font-size: 12px; line-height: 1.5; height: 54px; overflow: hidden; }
+
+  .actions{ display:flex; gap:8px; margin-top: 10px; }
+  form{ margin: 0; }
+
+  .btn-tryon {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    display: inline-block;
+    text-decoration: none;
+    background-color: rgba(123,220,59,0.9);
+    color: white;
+    text-align: center;
+  }
+  .btn-tryon:hover { background-color: rgba(123,220,59,0.75); }
+
+  @media (max-width: 920px){
+    .layout{ grid-template-columns: 1fr; }
+    .side{ position: relative; top: 0; }
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="layout">
+  <aside class="panel side">
+    <div class="nav-section-title">Navigation</div>
+
+    <!-- 1) Categories -->
+    <button class="nav-btn" type="button" data-nav-btn="cats">
+      <span class="left"><span class="icon">☰</span> Categories</span>
+      <span>›</span>
+    </button>
+
+    <div class="nav-panel" data-nav-panel="cats">
+      <a class="cat {% if selected_category == 'All' %}active{% endif %}"
+         href="/?category=All&q={{ q|urlencode }}&sort={{ sort|urlencode }}">
+        <span>All</span>
+        <span class="badge">{{ total_count }}</span>
+      </a>
+
+      {% for c, count in categories_with_counts %}
+        <a class="cat {% if selected_category == c %}active{% endif %}"
+           href="/?category={{ c|urlencode }}&q={{ q|urlencode }}&sort={{ sort|urlencode }}">
+          <span>{{ c }}</span>
+          <span class="badge">{{ count }}</span>
+        </a>
+      {% endfor %}
+    </div>
+
+    <!-- 2) AI Stylist -->
+    <a class="nav-link" href="{{ url_for('stylist_page') }}">
+      <span class="left"><span class="icon">✨</span> AI Stylist</span>
+      <span>›</span>
+    </a>
+
+    <!-- 3) Size Recommendation (placeholder) -->
+    <a class="nav-link" href="{{ url_for('size_page') }}">
+      <span class="left"><span class="icon">📏</span> Size Recommendation</span>
+      <span>›</span>
+    </a>
+  </aside>
+
+  <main class="panel content">
+    <form class="toolbar" method="get" action="/">
+      <div class="title">
+        <h3>EcoTry Collection</h3>
+        <p>Browse • Add to cart • Checkout (demo flow)</p>
+      </div>
+
+      <input type="hidden" name="category" value="{{ selected_category }}"/>
+
+      <div class="field">
+        <span style="color: var(--muted); font-size: 12px;">Search</span>
+        <input name="q" value="{{ q }}" placeholder="e.g., hemp, silk, jacket..." />
+      </div>
+
+      <div class="field">
+        <span style="color: var(--muted); font-size: 12px;">Sort</span>
+        <select name="sort">
+          <option value="name_asc"  {% if sort == 'name_asc' %}selected{% endif %}>Name (A → Z)</option>
+          <option value="name_desc" {% if sort == 'name_desc' %}selected{% endif %}>Name (Z → A)</option>
+          <option value="eco_desc"  {% if sort == 'eco_desc' %}selected{% endif %}>Eco Score (High → Low)</option>
+          <option value="eco_asc"   {% if sort == 'eco_asc' %}selected{% endif %}>Eco Score (Low → High)</option>
+        </select>
+      </div>
+
+      <button class="btn" type="submit">Apply</button>
+      <a class="btn-ghost" href="/?category={{ selected_category|urlencode }}&q=&sort={{ sort|urlencode }}">Clear</a>
+    </form>
+
+    <section class="grid">
+      {% for p in products %}
+        {% set eco = p['sustainability_score'] %}
+        {% set eco10 = (eco if eco <= 10 else 10) %}
+        {% set eco_pct = (eco10 / 10.0) * 100 %}
+
+        <article class="card">
+          <div class="imgbox">
+            <span class="pill">{{ p['category'] }}</span>
+            <img src="{{ p['image_src'] }}" alt="{{ p['product_name'] }}">
+          </div>
+
+          <div class="body">
+            <h4 class="name">{{ p['product_name'] }}</h4>
+            <div class="meta">
+              <span>Fabric: <strong style="color: rgba(255,255,255,0.92)">{{ p['fabric_type'] }}</strong></span>
+              <span style="color: var(--muted);">#{{ p['product_id'] }}</span>
+            </div>
+
+            <div style="display:grid; gap: 6px; margin: 8px 0 10px;">
+              <div style="display:flex; justify-content:space-between; font-size: 12px; color: var(--muted);">
+                <span>Eco Score</span>
+                <strong style="color: rgba(255,255,255,0.92)">{{ '%.1f'|format(eco) }}/10</strong>
+              </div>
+              <div class="bar"><div class="fill" style="width: {{ '%.0f'|format(eco_pct) }}%;"></div></div>
+              <div style="display:flex; justify-content:space-between; font-size: 11px; color: var(--muted);">
+                <span>Water: {{ p['water_usage_liters'] }}L</span>
+                <span>CO₂: {{ p['co2_emission_kg'] }}kg</span>
+              </div>
+            </div>
+
+            <p class="desc">{{ p['awareness_text'] }}</p>
+
+            <div class="actions">
+              <form method="post" action="{{ url_for('add_to_cart', product_id=p['product_id']) }}">
+                <button class="btn" type="submit">Add to Cart</button>
+              </form>
+              <a class="btn-ghost" href="{{ url_for('cart_page') }}">View Cart</a>
+              <a class="btn-tryon" href="{{ url_for('tryon_product', product_id=p['product_id']) }}">
+                Virtual Try-On
+              </a>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+  const btn = document.querySelector("[data-nav-btn='cats']");
+  const panel = document.querySelector("[data-nav-panel='cats']");
+  btn?.addEventListener("click", () => {
+    btn.classList.toggle("active");
+    panel.classList.toggle("active");
+  });
+})();
+</script>
+{% endblock %}
+<head>
+    <title>Size Recommendation</title>
+</head>
+<body>
+    <h1>Upload Image for Size Recommendation</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        Height (cm): <input type="number" name="height" required><br><br>
+        Select Image: <input type="file" name="image" accept="image/*" required><br><br>
+        <button type="submit">Get Recommendation</button>
+    </form>
+</body>
